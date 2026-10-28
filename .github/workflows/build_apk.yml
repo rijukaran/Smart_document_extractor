@@ -9,55 +9,31 @@ on:
 
 jobs:
   build:
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-latest
 
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4
 
-      - name: Set up Python 3.10
-        uses: actions/setup-python@v5
-        with:
-          python-version: "3.10"
-
-      - name: Install System Dependencies
+      - name: Prepare App Files
         run: |
-          sudo apt update
-          sudo apt install -y git zip unzip openjdk-17-jdk autoconf libtool pkg-config zlib1g-dev libncurses-dev cmake libffi-dev libssl-dev
-
-      - name: Install Buildozer & Dependencies
-        run: |
-          pip install --upgrade pip
-          pip install --upgrade buildozer "cython<3.0" virtualenv
-
-      - name: Check Repository Files
-        run: |
-          echo "=== Files in Repository Root ==="
-          ls -la
           if [ -d "android" ]; then
-            echo "=== Files in android/ folder ==="
-            ls -la android
+            echo "Copying files from android/ to root..."
+            cp -r android/* . 2>/dev/null || true
           fi
+          echo "=== Root Directory Files ==="
+          ls -la
 
-      - name: Build Android APK
-        run: |
-          if [ -f "buildozer.spec" ]; then
-            echo "Found buildozer.spec in repository root"
-            yes | buildozer android debug
-          elif [ -f "android/buildozer.spec" ]; then
-            echo "Found buildozer.spec in android folder"
-            cd android
-            yes | buildozer android debug
-          else
-            echo "::error::buildozer.spec not found! You must upload main.py, extractor_core.py, and buildozer.spec to your repository."
-            exit 1
-          fi
+      - name: Build with Buildozer Action
+        uses: ArtemSBulgakov/buildozer-action@v1
+        id: buildozer
+        with:
+          command: buildozer android debug
+          buildozer_version: stable
 
       - name: Upload Standalone APK Artifact
         uses: actions/upload-artifact@v4
         with:
           name: SmartDocExtractor-Android-APK
-          path: |
-            bin/*.apk
-            android/bin/*.apk
+          path: ${{ steps.buildozer.outputs.filename }}
           retention-days: 14
