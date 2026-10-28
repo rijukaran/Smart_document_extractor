@@ -1,103 +1,87 @@
 [app]
 
-# (str) Title of your application
+# Application title
 title = Smart PDF Extractor
 
-# (str) Package name
+# Package name
 package.name = smartdocextractor
 
-# (str) Package domain (needed for android/ios packaging)
+# Package domain
 package.domain = org.extractor
 
-# (str) Source code where the main.py lives
+# Source code directory
 source.dir = .
 
-# (list) Source files to include (let empty to include all the source directory)
-source.include_exts = py,png,jpg,kv,atlas,json,txt
+# Include file extensions
+source.include_exts = py,png,jpg,jpeg,kv,atlas,json,txt
 
-# (list) List of inclusions using pattern matching
-#source.include_patterns = assets/*,images/*.png
+# Exclude extensions
+source.exclude_exts = spec,pyc,pyo,pyd,bak
 
-# (list) Source files to exclude (let empty to not exclude anything)
-source.exclude_exts = spec,pyc,pyd,bak
+# Exclude directories
+source.exclude_dirs = tests,bin,.git,.github,__pycache__
 
-# (list) List of directory to exclude (let empty to not exclude anything)
-source.exclude_dirs = tests, bin, .git, .github, __pycache__
-
-# (str) Application versioning (method 1)
+# Version
 version = 1.0.0
 
-# (list) Application requirements
-# comma separated e.g. requirements = sqlite3,kivy
-requirements = python3,kivy,pillow,numpy,python-docx,python-pptx,lxml,plyer,setuptools
+# Application requirements
+requirements = python3,kivy,numpy,pillow,plyer,setuptools
 
-# (str) Supported orientation (one of landscape, sensorLandscape, portrait or all)
-orientation = portrait,landscape
+# Orientation
+orientation = portrait
 
-# (bool) Indicate if the application should be fullscreen or not
+# Fullscreen
 fullscreen = 0
 
-# (bool) Automatically accept Android SDK licenses
-android.accept_sdk_license = True
+# Presplash (optional)
+# presplash.filename = data/presplash.png
 
-# (list) Permissions
-android.permissions = READ_EXTERNAL_STORAGE, WRITE_EXTERNAL_STORAGE, MANAGE_EXTERNAL_STORAGE, INTERNET
+# Icon (optional)
+# icon.filename = data/icon.png
 
-# (int) Target Android API, should be as high as possible.
+# Android permissions
+android.permissions = INTERNET,READ_EXTERNAL_STORAGE,WRITE_EXTERNAL_STORAGE
+
+# Android API levels
 android.api = 33
-
-# (int) Minimum API your APK / AAB will support.
 android.minapi = 21
 
-# (str) Android NDK version to use
+# NDK
 android.ndk = 25b
 
-# (bool) Use --private data storage (True) or --dir public storage (False)
-android.private_storage = True
-
-# (list) The Android architectures to build for
+# Android architecture
 android.archs = arm64-v8a
 
-# (bool) Android logcat filters to use
-android.logcat_filters = *:S python:D
+# Storage mode
+android.private_storage = True
 
-# (bool) Copy library instead of making a libpymodules.so
+# Accept SDK licenses
+android.accept_sdk_license = True
+
+# Copy libraries
 android.copy_libs = 1
 
-# (str) The format used to package the app for release mode (aab or apk or aar).
+# Enable backups
+android.allow_backup = True
+
+# Logcat filtering
+android.logcat_filters = *:S python:D
+
+# Generate APK
+android.debug_artifact = apk
 android.release_artifact = apk
 
-# (str) The format used to package the app for debug mode (apk or aar).
-android.debug_artifact = apk
+# Keep screen on
+android.wakelock = False
 
-# (bool) allow backup of app data
-android.allow_backup = True
 
 [buildozer]
 
-# (int) Log level (0 = error only, 1 = info, 2 = debug with command-line)
+# Buildozer log level
 log_level = 2
 
-# (int) Display warning if buildozer is run as root (0 = False, 1 = True)
+# Warn when running as root
 warn_on_root = 1
 
-# (str) Path to build artifact storage, default is ./bin
+# Output directory
 bin_dir = ./bin
-
-# (bool) Automatically accept Android SDK licenses
-android.accept_sdk_license = True
-
-# (list) Permissions
-android.permissions = READ_EXTERNAL_STORAGE, WRITE_EXTERNAL_STORAGE, MANAGE_EXTERNAL_STORAGE, INTERNET
-
-# (int) Target Android API
-android.api = 33
-
-# (int) Minimum API your APK will support
-android.minapi = 21
-
-# (str) Android NDK version to use
-android.ndk = 25b
-
-# (list) The Android architectures to build for
-android.archs = arm64-v8a
