@@ -9,7 +9,7 @@ on:
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
 
     steps:
       - name: Checkout Repository
@@ -23,20 +23,27 @@ jobs:
       - name: Install System Dependencies
         run: |
           sudo apt update
-          sudo apt install -y git zip unzip openjdk-17-jdk autoconf libtool pkg-config zlib1g-dev \
-            libncurses5-dev libncursesw5-dev libtinfo5 cmake libffi-dev libssl-dev cython3
+          sudo apt install -y git zip unzip openjdk-17-jdk autoconf libtool pkg-config zlib1g-dev libncurses-dev cmake libffi-dev libssl-dev
 
       - name: Install Buildozer & Dependencies
         run: |
           pip install --upgrade pip
-          pip install --upgrade buildozer cython virtualenv
+          pip install --upgrade buildozer "cython<3.0" virtualenv
 
       - name: Build Android APK
         run: |
-          if [ -f "android/buildozer.spec" ]; then
+          if [ -f "buildozer.spec" ]; then
+            echo "Found buildozer.spec in repository root"
+            buildozer android debug
+          elif [ -f "android/buildozer.spec" ]; then
+            echo "Found buildozer.spec in android folder"
             cd android
+            buildozer android debug
+          else
+            echo "ERROR: buildozer.spec not found in root or android/ folder!"
+            echo "Please make sure you have uploaded buildozer.spec, main.py, and extractor_core.py."
+            exit 1
           fi
-          buildozer android debug
 
       - name: Upload Standalone APK Artifact
         uses: actions/upload-artifact@v4
