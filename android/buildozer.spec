@@ -37,6 +37,9 @@ orientation = portrait,landscape
 # (bool) Indicate if the application should be fullscreen or not
 fullscreen = 0
 
+# (bool) Automatically accept Android SDK licenses
+android.accept_sdk_license = True
+
 # (list) Permissions
 android.permissions = READ_EXTERNAL_STORAGE, WRITE_EXTERNAL_STORAGE, MANAGE_EXTERNAL_STORAGE, INTERNET
 
@@ -52,9 +55,8 @@ android.ndk = 25b
 # (bool) Use --private data storage (True) or --dir public storage (False)
 android.private_storage = True
 
-# (list) The Android architectures to build for, choices: armeabi-v7a, arm64-v8a, x86, x86_64
-# arm64-v8a covers virtually all modern Android phones (Android 9+)
-android.archs = arm64-v8a, armeabi-v7a
+# (list) The Android architectures to build for
+android.archs = arm64-v8a
 
 # (bool) Android logcat filters to use
 android.logcat_filters = *:S python:D
@@ -82,3 +84,20 @@ warn_on_root = 1
 # (str) Path to build artifact storage, default is ./bin
 bin_dir = ./bin
 
+# (bool) Automatically accept Android SDK licenses
+android.accept_sdk_license = True
+
+# (list) Permissions
+android.permissions = READ_EXTERNAL_STORAGE, WRITE_EXTERNAL_STORAGE, MANAGE_EXTERNAL_STORAGE, INTERNET
+
+# (int) Target Android API
+android.api = 33
+
+# (int) Minimum API your APK will support
+android.minapi = 21
+
+# (str) Android NDK version to use
+android.ndk = 25b
+
+# (list) The Android architectures to build for
+android.archs = arm64-v8a
