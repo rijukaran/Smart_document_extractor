@@ -30,18 +30,26 @@ jobs:
           pip install --upgrade pip
           pip install --upgrade buildozer "cython<3.0" virtualenv
 
+      - name: Check Repository Files
+        run: |
+          echo "=== Files in Repository Root ==="
+          ls -la
+          if [ -d "android" ]; then
+            echo "=== Files in android/ folder ==="
+            ls -la android
+          fi
+
       - name: Build Android APK
         run: |
           if [ -f "buildozer.spec" ]; then
             echo "Found buildozer.spec in repository root"
-            buildozer android debug
+            yes | buildozer android debug
           elif [ -f "android/buildozer.spec" ]; then
             echo "Found buildozer.spec in android folder"
             cd android
-            buildozer android debug
+            yes | buildozer android debug
           else
-            echo "ERROR: buildozer.spec not found in root or android/ folder!"
-            echo "Please make sure you have uploaded buildozer.spec, main.py, and extractor_core.py."
+            echo "::error::buildozer.spec not found! You must upload main.py, extractor_core.py, and buildozer.spec to your repository."
             exit 1
           fi
 
