@@ -9,31 +9,49 @@ on:
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
 
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4
 
-      - name: Prepare App Files
+      - name: Set up Python 3.10
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.10"
+
+      - name: Set up Java 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: "temurin"
+          java-version: "17"
+
+      - name: Install System Dependencies
+        run: |
+          sudo apt update
+          sudo apt install -y git zip unzip autoconf libtool pkg-config zlib1g-dev libncurses-dev cmake libffi-dev libssl-dev libltdl-dev patch
+
+      - name: Install Buildozer & Cython
+        run: |
+          pip install --upgrade pip
+          pip install --upgrade buildozer "cython<3.0" virtualenv
+
+      - name: Prepare Project Files
         run: |
           if [ -d "android" ]; then
             echo "Copying files from android/ to root..."
             cp -r android/* . 2>/dev/null || true
           fi
-          echo "=== Root Directory Files ==="
+          echo "=== Files in Build Directory ==="
           ls -la
 
-      - name: Build with Buildozer Action
-        uses: ArtemSBulgakov/buildozer-action@v1
-        id: buildozer
-        with:
-          command: buildozer android debug
-          buildozer_version: stable
+      - name: Build Android APK
+        run: |
+          buildozer -v android debug
 
       - name: Upload Standalone APK Artifact
         uses: actions/upload-artifact@v4
         with:
           name: SmartDocExtractor-Android-APK
-          path: ${{ steps.buildozer.outputs.filename }}
+          path: bin/*.apk
           retention-days: 14
